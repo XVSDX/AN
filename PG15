@@ -1,0 +1,196 @@
+Activity.xml<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rollno"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:textSize="25dp"
+        />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="30dp"
+        android:textSize="25dp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:textSize="25dp"/>
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="100dp"
+        android:textSize="25dp"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marks"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="150dp"
+        android:textSize="25dp"/>
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="150dp"
+        android:textSize="25dp"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INSERT"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="230dp"
+        android:textSize="25dp"
+        android:onClick="insert"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UPDATE"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="230dp"
+        android:textSize="25dp"
+        android:onClick="update"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DISPLAY"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="300dp"
+        android:textSize="25dp"
+        android:onClick="display"/>
+
+</RelativeLayout>
+Java Code:
+package com.example.pgm15;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
+import static android.content.Context.*;
+
+public class MainActivity extends AppCompatActivity {
+    EditText Roll,Name,Marks;
+    SQLiteDatabase db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Roll=(EditText)findViewById(R.id.editText1);
+        Name=(EditText)findViewById(R.id.editText2);
+        Marks=(EditText)findViewById(R.id.editText3);
+        db=openOrCreateDatabase("rls", Context.MODE_PRIVATE,null);
+        db.execSQL("create table if not exists bca(roll varchar,name varchar,"+"marks varchar)");
+    }
+    public void insert(View view)
+    {
+        if(Roll.getText().toString().trim().length()==0 ||
+            Name.getText().toString().trim().length()==0 ||
+            Marks.getText().toString().trim().length()==0)
+        {
+            showmessage("Error","Insert Values");
+            return;
+        }
+        else
+        {
+            db.execSQL("insert into bca values('"+Roll.getText()+"','"+Name.getText()+"','"+Marks.getText()+"');");
+            showmessage("Sucees","Data Inserted Sucessfully");
+            cleartext();
+        }
+
+    }
+
+    public void update(View view)
+    {
+        if(Roll.getText().toString().trim().length()==0)
+        {
+            showmessage("error","Enter a rollnumber");
+            return;
+        }
+        Cursor c=db.rawQuery("select * from bca where roll='"+Roll.getText()+"' ",null);
+        if(c.moveToFirst())
+        {
+            db.execSQL("update bca set name='"+Name.getText()+"',marks='"+Marks.getText()+"' where roll='"+Roll.getText()+"'");
+            showmessage("success","Record modified");
+        }
+        cleartext();
+
+    }
+    public void display(View view)
+    {
+        Cursor c= db.rawQuery("select * from bca",null);
+        if(c.getCount()==0)
+        {
+            showmessage("Error","No Record found");
+            return;
+        }
+        StringBuffer buffer = new StringBuffer();
+        while(c.moveToNext())
+        {
+            buffer.append("Roll:"+c.getString(0)+"\n");
+            buffer.append("Name:"+c.getString(1)+"\n");
+            buffer.append("MArks:"+c.getString(2)+"\n\n");
+        }
+        showmessage("Student Datails",buffer.toString());
+    }
+    public void showmessage(String title,String message)
+    {
+        AlertDialog.Builder builder =new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.show();
+    }
+    public void cleartext()
+    {
+        Roll.setText("");
+        Name.setText("");
+        Marks.setText("");
+        Roll.requestFocus();
+    }
+}
