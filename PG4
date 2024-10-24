@@ -1,0 +1,83 @@
+XML:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pizza"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="25dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Burger"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="25dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cofee"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="25dp"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="25dp"
+        android:onClick="order"/>
+</RelativeLayout>
+
+JAVA:
+public class MainActivity extends AppCompatActivity {
+    CheckBox c1,c2,c3;
+    Button b;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        c1=(CheckBox)findViewById(R.id.checkBox);
+        c2=(CheckBox)findViewById(R.id.checkBox2);
+        c3=(CheckBox)findViewById(R.id.checkBox3);
+        b=(Button)findViewById(R.id.button);
+
+    }
+    public void order(View view)
+    {
+        int total=0;
+        StringBuilder result=new StringBuilder();
+        result.append("Selected Items are:\n");
+        if(c1.isChecked()){
+            result.append("\nPizaa 100 Rs\n");
+            total+=100;
+        }
+        if(c2.isChecked()){
+            result.append("\nBurger 150 Rs\n");
+            total+=150;
+        }
+        if(c3.isChecked()){
+            result.append("\nCofee 100 Rs\n");
+            total+=100;
+        }
+        result.append("\nTotal Bill="+total+"Rs");
+        Toast.makeText(getApplicationContext(),result.toString(),Toast.LENGTH_LONG).show();
+    }
+}
