@@ -1,0 +1,44 @@
+XML:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="383dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp" />
+</RelativeLayout>
+
+JAVA:
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        SeekBar sb=(SeekBar)findViewById(R.id.seekBar);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Toast.makeText(getApplicationContext(),"The Progress Value:"+i,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getApplicationContext(),"SeekBar_Touch_Started",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getApplicationContext(),"SeekBar_Touch_Stopped",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+}
