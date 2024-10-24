@@ -1,0 +1,59 @@
+XML:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <DatePicker
+        android:id="@+id/datepicker"
+        android:layout_width="373dp"
+        android:layout_height="402dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="144dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="430dp"
+        android:layout_marginLeft="20dp"
+        android:text="" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change_Date"
+        android:layout_marginTop="430dp"
+        android:layout_marginLeft="190dp"
+        android:textSize="15dp"
+        android:onClick="change"
+        />
+</RelativeLayout>
+JAVA
+public class MainActivity extends AppCompatActivity {
+
+    DatePicker dp;
+    TextView t;
+    Button b;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        dp=(DatePicker)findViewById(R.id.datepicker);
+        t=(TextView)findViewById(R.id.textView2);
+        b=(Button)findViewById(R.id.button2);
+        t.setText("Current Date:"+date());
+    }
+    public void change(View view){
+        t.setText("Changed_Date"+date());
+    }
+    public String date(){
+        StringBuilder builder=new StringBuilder();
+        builder.append((dp.getMonth()+1)+"/");
+        builder.append(dp.getDayOfMonth()+"/");
+        builder.append(dp.getYear());
+        return builder.toString();
+    }
+}
